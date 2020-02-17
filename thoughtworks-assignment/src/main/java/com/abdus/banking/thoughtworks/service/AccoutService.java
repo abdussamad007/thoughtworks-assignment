@@ -91,7 +91,7 @@ public class AccoutService implements IAccoutService{
 	@Override
 	public void checkBalance(String acctNo, Account acct) throws InvalidAccountNoException {
 		
-		reentrantlock.lock();
+		
 		
 		try
         { 
@@ -103,10 +103,7 @@ public class AccoutService implements IAccoutService{
         { 
             throw new InvalidAccountNoException("Exception to fetch balance for account " + acctNo);
         } 
-        finally
-        { 
-            reentrantlock.unlock(); 
-        }
+        
 	
 		
 	}
