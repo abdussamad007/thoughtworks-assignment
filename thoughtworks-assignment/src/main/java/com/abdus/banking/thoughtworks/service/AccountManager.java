@@ -1,12 +1,15 @@
 package com.abdus.banking.thoughtworks.service;
 
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.locks.ReentrantLock;
 
 import com.abdus.banking.thoughtworks.domain.Account;
 import com.abdus.banking.thoughtworks.exceptions.InvalidAccountNoException;
 import com.abdus.banking.thoughtworks.exceptions.InvalidTransactionException;
 
 public class AccountManager implements IAccountManager{
+	
+	ReentrantLock reentrantlock = new ReentrantLock();
 
 	public void validateTranscation() throws InvalidTransactionException {
 		// TODO Auto-generated method stub
@@ -40,6 +43,10 @@ public class AccountManager implements IAccountManager{
 
 
 	public void deposit(double balance,String acctNo, Account acct) throws  InvalidTransactionException{
+		
+		reentrantlock.lock();
+		try
+        { 
 		// TODO Auto-generated method stub
 		//validate if balance is +ve 
 		if(balance>0) {
@@ -48,11 +55,26 @@ public class AccountManager implements IAccountManager{
 			throw new InvalidTransactionException("Invalid balance. Balance musty be > 0 or positive value " + balance);
 		}
 		
+        } 
+        catch(Exception e) 
+        { 
+            throw new InvalidTransactionException(e.toString());
+        } 
+        finally
+        { 
+            reentrantlock.unlock(); 
+        }
+		
 		
 	}
 
 	@Override
 	public void withdrawal(double withdrawingAmt, String acctNo, Account acct) throws InvalidTransactionException {
+		
+		reentrantlock.lock();
+		try
+        {
+		
 		// TODO Auto-generated method stub
 		 double currentBal = acct.getAcctBal();
 		 if(withdrawingAmt <= 0 ) {
@@ -63,6 +85,16 @@ public class AccountManager implements IAccountManager{
 		 else {
 			 new AccoutService().withdrawal(withdrawingAmt,acctNo,acct);
 		 }
+		 
+        } 
+        catch(Exception e) 
+        { 
+            throw new InvalidTransactionException(e.toString());
+        } 
+        finally
+        { 
+            reentrantlock.unlock(); 
+        }
 		
 	}
 
