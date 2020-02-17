@@ -10,16 +10,14 @@ import com.abdus.banking.thoughtworks.exceptions.InvalidAccountNoException;
 import com.abdus.banking.thoughtworks.exceptions.InvalidTransactionException;
 
 public class AccoutService implements IAccoutService{
-	 ReentrantLock reentrantlock = new ReentrantLock();
+	 
 
 	public void deposit(double balance,String acctNo, Account acct) throws InvalidTransactionException{
 		
-		reentrantlock.lock();
+		
 		
 		Transaction trn = new Transaction();
-		
-		try
-        { 
+
 			double currentBal = acct.getAcctBal();
 			double updatedBalance = currentBal + balance;
 			
@@ -32,15 +30,7 @@ public class AccoutService implements IAccoutService{
 			acct.setAcctBal(updatedBalance);
 			acct.addTransaction(trn);
 			
-        } 
-        catch(Exception e) 
-        { 
-            throw new InvalidTransactionException(trn.toString());
-        } 
-        finally
-        { 
-            reentrantlock.unlock(); 
-        }
+       
 		
 	}
 
@@ -49,7 +39,7 @@ public class AccoutService implements IAccoutService{
 	public void withdrawal(double withdrawingAmt, String acctNo, Account acct) throws InvalidTransactionException {
 
 		
-		reentrantlock.lock();
+		
 		
 		Transaction trn = new Transaction();
 		
@@ -72,11 +62,7 @@ public class AccoutService implements IAccoutService{
         { 
             throw new InvalidTransactionException(trn.toString());
         } 
-        finally
-        { 
-            reentrantlock.unlock(); 
-        }
-		
+       
 	
 		
 	}
@@ -103,7 +89,7 @@ public class AccoutService implements IAccoutService{
         { 
             throw new InvalidAccountNoException("Exception to fetch balance for account " + acctNo);
         } 
-        
+       
 	
 		
 	}
@@ -112,6 +98,7 @@ public class AccoutService implements IAccoutService{
 	@Override
 	public void listTransaction(String acctNo, Account acct) throws Exception {
 		
+		//reentrantlock.lock();
 		
 		try
         { 
@@ -128,7 +115,6 @@ public class AccoutService implements IAccoutService{
             throw new InvalidAccountNoException("Exception to fetch balance for account " + acctNo);
         } 
         
-		
 	}
 
 
